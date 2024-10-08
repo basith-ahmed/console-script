@@ -1,4 +1,5 @@
 (function() {
+    // switch tabs
     Object.defineProperty(document, 'visibilityState', {
         get: () => 'visible',
         configurable: true
@@ -9,6 +10,7 @@
         configurable: true
     });
 
+    // action set - I
     const originalAddEventListener = document.addEventListener;
     document.addEventListener = function(type, listener, options) {
         if (type === 'visibilitychange') {
@@ -18,6 +20,7 @@
         return originalAddEventListener.call(this, type, listener, options);
     };
 
+    // full screen
     Object.defineProperty(document, 'fullscreenElement', {
         get: () => null,
         configurable: true
@@ -35,6 +38,7 @@
         configurable: true
     });
 
+    // action set - II
     const originalRequestFullscreen = Element.prototype.requestFullscreen;
     Element.prototype.requestFullscreen = function(...args) {
         console.warn('Blocked attempt to enter fullscreen');
@@ -57,12 +61,14 @@
         };
     })(document.addEventListener);
 
+    // copy and paste
     ['copy', 'cut', 'paste'].forEach(eventType => {
         document.addEventListener(eventType, (event) => {
             event.stopPropagation();
         }, true);
     });
 
+    // action set - III
     document.addEventListener = (function(original) {
         return function(type, listener, options) {
             if (['copy', 'cut', 'paste'].includes(type)) {
@@ -112,5 +118,5 @@
         return originalRequestAnimationFrame.call(window, callback);
     };
 
-    console.log('Script loaded: Crack that PAT, all the best.');
+    console.log('Script loaded successfully, all the best soldier.');
 })();
