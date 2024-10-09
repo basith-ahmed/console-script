@@ -22,26 +22,29 @@
 
     // full screen
     Object.defineProperty(document, 'fullscreenElement', {
-        get: () => null,
+        get: () => document.documentElement,
         configurable: true
     });
+    
     Object.defineProperty(document, 'fullscreenEnabled', {
         get: () => true,
         configurable: true
     });
+    
     Object.defineProperty(document, 'webkitFullscreenElement', {
-        get: () => null,
+        get: () => document.documentElement,
         configurable: true
     });
+    
     Object.defineProperty(document, 'webkitIsFullScreen', {
-        get: () => false,
+        get: () => true,
         configurable: true
     });
 
     // action set - II
     const originalRequestFullscreen = Element.prototype.requestFullscreen;
     Element.prototype.requestFullscreen = function(...args) {
-        console.warn('Blocked attempt to enter fullscreen');
+        console.warn('Simulated entering fullscreen');
         return Promise.resolve();
     };
 
@@ -60,7 +63,7 @@
             return original.call(this, type, listener, options);
         };
     })(document.addEventListener);
-
+    
     // copy and paste
     ['copy', 'cut', 'paste'].forEach(eventType => {
         document.addEventListener(eventType, (event) => {
